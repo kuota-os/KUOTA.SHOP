@@ -1,0 +1,3 @@
+import assert from 'node:assert/strict';
+function nextDue(date){const d=new Date(`${date}T12:00:00-05:00`);const day=d.getDate();if(day<2)return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-02`;if(day<17)return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-17`;d.setMonth(d.getMonth()+1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-02`;}
+assert.equal(nextDue('2026-09-01'),'2026-09-02');assert.equal(nextDue('2026-09-02'),'2026-09-17');assert.equal(nextDue('2026-09-16'),'2026-09-17');assert.equal(nextDue('2026-09-17'),'2026-10-02');assert.equal(nextDue('2026-09-30'),'2026-10-02');console.log('KUOTA finance tests OK');
