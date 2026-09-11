@@ -1,0 +1,19 @@
+{
+  "name": "kuota-platform",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-check.mjs",
+    "check": "node scripts/build-check.mjs",
+    "lint": "node --check app.js && node --check lib/finance.js && node --check lib/supabase.js",
+    "test": "node scripts/finance-test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "busboy": "^1.6.0"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
