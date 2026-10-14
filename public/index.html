@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="KUOTA Cartagena — iPhone, iPad y Apple Watch nuevos o de exhibición. Compra de contado, crédito propio (Plan B) o entrega tu iPhone como parte de pago (Plan C).">
+<meta property="og:title" content="KUOTA — Tecnología que se adapta a ti">
+<meta property="og:description" content="iPhone, iPad y Apple Watch nuevos o de exhibición en Cartagena. Contado, crédito o parte de pago.">
+<meta property="og:type" content="website">
+<title>KUOTA — Tecnología que se adapta a ti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <p id="loadingText">Cargando catálogo…</p>
+</div>
+
+<div class="app" id="app">
+
+  <header class="site-header"><div class="nav-wrap"><button class="brand" onclick="goHome()" aria-label="Ir a inicio"><span class="brand-logo">KU<span>O</span>TA</span></button><nav class="main-nav" aria-label="Navegación principal"><button class="nav-link active" data-nav="home" onclick="goHome()">Inicio</button><button class="nav-link" data-nav="catalogo" onclick="goCatalog()">Catálogo</button><button class="nav-link" data-nav="contacto" onclick="goContacto()">Contacto</button><button class="nav-client" onclick="goCliente()">Soy cliente <span>→</span></button></nav><button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Abrir menú">☰</button></div><div class="mobile-nav" id="mobileNav"><button onclick="goHome();toggleMobileMenu()">Inicio</button><button onclick="goCatalog();toggleMobileMenu()">Catálogo</button><button onclick="goContacto();toggleMobileMenu()">Contacto</button><button onclick="goCliente();toggleMobileMenu()">Soy cliente</button></div><button class="back-btn" id="backBtn" onclick="goBack()" style="visibility:hidden;">‹ Volver</button></header>
+
+  <!-- ============ INICIO ============ -->
+  <section class="screen active" data-screen="home"><div class="home-hero"><div class="hero-copy"><div class="eyebrow-row">KUOTA · Cartagena de Indias</div><h1>Más que un celular,<br><span>es tu próxima historia.</span></h1><p>iPhone nuevos y de exhibición, con opciones de contado, crédito y parte de pago. Tú eliges cómo llevarlo.</p><div class="hero-actions"><button class="btn btn-primary" onclick="goCatalog()">Ver catálogo <span>→</span></button><button class="btn btn-ghost" onclick="goContacto()">Hablar con un asesor</button></div><div class="trust-row"><div><b>✓</b><span>Garantía real</span></div><div><b>✓</b><span>Equipos verificados</span></div><div><b>✓</b><span>Compra segura</span></div></div></div><div class="hero-device" aria-hidden="true"><div class="hero-glow"></div><div class="hero-phone"><div class="phone-cameras"><i></i><i></i><i></i></div></div><div class="hero-note">Tu próximo iPhone<br><strong>está aquí.</strong></div></div></div><div class="home-section-head"><div><div class="eyebrow-row">Compra como quieras</div><h2>Una forma más simple de comprar.</h2></div><button class="text-link" onclick="goCatalog()">Explorar equipos →</button></div><div class="benefit-grid"><article><span class="benefit-icon">▣</span><h3>Contado</h3><p>Paga de forma segura y recibe tu equipo sin complicaciones.</p></article><article><span class="benefit-icon">◫</span><h3>Crédito</h3><p>Encuentra la opción de financiación que mejor se adapte a ti.</p></article><article><span class="benefit-icon">↻</span><h3>Parte de pago</h3><p>Entrega tu iPhone actual y úsalo para reducir el valor del nuevo.</p></article></div></section>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <section class="screen" data-screen="catalogo"><div class="catalog-head"><div><div class="eyebrow-row">KUOTA · Catálogo</div><h1 class="hero-title">Encuentra tu próximo iPhone.</h1><p class="hero-sub">Elige un equipo, configúralo y decide cómo quieres comprarlo.</p></div></div><div class="tabs"><button class="tab active" data-tab="nuevos" onclick="setTab('nuevos')">Nuevos</button><button class="tab" data-tab="exhibicion" onclick="setTab('exhibicion')">Exhibición</button></div><div id="catalogList"></div></section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section class="screen" data-screen="contacto"><div class="contact-layout"><div><div class="eyebrow-row">Estamos para ayudarte</div><h1 class="hero-title">¿Tienes dudas?</h1><p class="hero-sub">Escríbenos y te ayudamos a elegir equipo, forma de pago o resolver cualquier inquietud sobre tu compra.</p><a class="btn btn-primary" href="https://wa.me/573052890679?text=Hola%20KUOTA%2C%20tengo%20una%20consulta" target="_blank" rel="noopener">WhatsApp <span>→</span></a></div><div class="contact-card"><div><span>WhatsApp</span><strong>305 289 0679</strong></div><div><span>Instagram</span><strong>@kuota.ctg</strong></div><div><span>Atención</span><strong>Cartagena de Indias</strong></div></div></div></section>
+
+  <!-- ============ SOY CLIENTE ============ -->
+  <section class="screen" data-screen="cliente"><div class="client-layout"><div class="client-badge">KUOTA</div><div class="eyebrow-row">Ya compraste con nosotros</div><h1 class="hero-title">Soy cliente.</h1><p class="hero-sub">Estamos contigo después de la compra. Consulta el estado de tu pedido, garantía o recibe soporte directamente con nuestro equipo.</p><div class="client-actions"><a class="option-card" href="https://wa.me/573052890679?text=Hola%20KUOTA%2C%20soy%20cliente%20y%20quiero%20consultar%20mi%20compra" target="_blank" rel="noopener"><h3>Consultar mi compra</h3><p>Habla con un asesor por WhatsApp.</p><span>→</span></a><a class="option-card" href="https://wa.me/573052890679?text=Hola%20KUOTA%2C%20soy%20cliente%20y%20necesito%20ayuda%20con%20mi%20garant%C3%ADa" target="_blank" rel="noopener"><h3>Garantía y soporte</h3><p>Te ayudamos con tu equipo después de la compra.</p><span>→</span></a></div></div></section>
+
+  <!-- ============ CONFIGURAR (gigas + color) ============ -->
+  <section class="screen" data-screen="configurar">
+    <div class="eyebrow-row" id="cfgEyebrow">Configura tu equipo</div>
+    <h1 class="hero-title" id="cfgTitle">Configura tu equipo</h1>
+    <p class="hero-sub" id="cfgSub"></p>
+
+    <div class="illustration-frame" id="cfgIllustration"></div>
+
+    <h3 class="section-label">Almacenamiento</h3>
+    <div class="storage-grid" id="storageSelector"></div>
+
+    <div class="summary-card" id="cfgSummary" style="margin-bottom:22px;"></div>
+
+    <h3 class="section-label">Color</h3>
+    <div class="swatch-grid" id="colorGrid"></div>
+
+    <button class="btn btn-primary btn-block" id="cfgContinueBtn" onclick="cfgContinue()">Continuar</button>
+  </section>
+
+  <!-- ============ CARRITO ============ -->
+  <section class="screen" data-screen="carrito">
+    <div class="eyebrow-row">Compra de contado</div>
+    <h1 class="hero-title">Carrito</h1>
+    <p class="hero-sub">Pago de contado por transferencia. Incluye el 4x1000.</p>
+
+    <div class="summary-card" id="cartSummary"></div>
+
+    <label class="check-row">
+      <input type="checkbox" id="shipCheckbox" onchange="onDeliveryToggle('shipping')">
+      <span><b>Envío nacional</b> — 5% del valor del producto + $50.000 de flete</span>
+    </label>
+    <div class="card-form" id="shipForm" style="display:none;">
+      <div class="field"><label>Nombre completo</label><input id="shipName" class="inline-input"></div>
+      <div class="field"><label>Número de cédula</label><input id="shipCedula" class="inline-input" inputmode="numeric"></div>
+      <div class="field"><label>Departamento</label><input id="shipDept" class="inline-input"></div>
+      <div class="field"><label>Ciudad</label><input id="shipCity" class="inline-input"></div>
+      <div class="field"><label>Dirección exacta</label><input id="shipAddress" class="inline-input"></div>
+      <div class="field"><label>Número de WhatsApp</label><input id="shipWhatsapp" class="inline-input" type="tel"></div>
+    </div>
+
+    <label class="check-row">
+      <input type="checkbox" id="domCheckbox" onchange="onDeliveryToggle('domestic')">
+      <span><b>Domicilio Cartagena de Indias</b> — 0,7% del valor del producto</span>
+    </label>
+    <div class="card-form" id="domForm" style="display:none;">
+      <div class="field"><label>Nombre completo</label><input id="domName" class="inline-input"></div>
+      <div class="field"><label>Número de cédula</label><input id="domCedula" class="inline-input" inputmode="numeric"></div>
+      <div class="field"><label>Dirección exacta</label><input id="domAddress" class="inline-input"></div>
+      <div class="field"><label>Número de WhatsApp</label><input id="domWhatsapp" class="inline-input" type="tel"></div>
+    </div>
+
+    <div class="summary-card" id="cartBreakdown" style="margin-top:6px;"></div>
+
+    <button class="btn btn-outline btn-block" id="copyAmountBtn" onclick="copyCartAmount()" style="margin:12px 0;">Copiar valor a pagar</button>
+
+    <div class="note"><b>Nota:</b> este valor aplica solo para pago de contado por transferencia. Si Wompi te pide confirmar o ingresar el monto, usa el botón de arriba para pegarlo exacto. Si prefieres pagar a crédito, vuelve al catálogo y elige "Quiero llevarlo a crédito".</div>
+
+    <button class="btn btn-primary btn-block" id="payBtn" onclick="goPagar()">Pagar ahora</button>
+  </section>
+
+  <!-- ============ CRÉDITO: elegir plan ============ -->
+  <section class="screen" data-screen="credito-plans">
+    <div class="eyebrow-row">Compra a crédito</div>
+    <h1 class="hero-title">¿Cuál es tu situación crediticia?</h1>
+    <p class="hero-sub">Elige la opción que mejor te describe y te mostramos el camino más rápido para llevarte tu equipo.</p>
+
+    <div class="summary-card" id="creditDeviceBar" style="margin-bottom:20px;"></div>
+
+    <div class="option-card" onclick="show('planA-entities')">
+      <span class="tag">Plan A</span>
+      <h3>Buena vida crediticia</h3>
+      <p>Puedes llevártelo hasta sin cuota inicial si tienes cupo con alguna de estas entidades.</p>
+      <div class="btn btn-outline btn-sm" style="width:auto;display:inline-flex;">Ver entidades →</div>
+    </div>
+
+    <div class="option-card" id="planBOptionCard" onclick="goPlanBFromCredito()">
+      <span class="tag gold">Plan B</span>
+      <h3>Reportado o poco historial</h3>
+      <p>Sin vida crediticia o reportado. Aplica con cuota inicial, según el equipo. Solo iPhone: no iPad ni accesorios.</p>
+      <div class="btn btn-outline btn-sm" style="width:auto;display:inline-flex;">Ver planes con inicial →</div>
+    </div>
+
+    <div class="note" id="planBUnavailableNote" style="display:none;">
+      El Plan B (reportado / poco historial) no está disponible para este equipo específico. Este equipo solo aplica bajo el Plan A (Buena vida crediticia).
+    </div>
+
+    <div class="option-card" id="planCOptionCard" onclick="startPlanC()">
+      <span class="tag" style="color:#9fb8cf;">Plan C</span>
+      <h3>Recibimos tu iPhone en parte de pago</h3>
+      <p>Entrega tu iPhone actual como parte del pago de este equipo. Evaluamos tu dispositivo y te decimos cuánto te reconocemos.</p>
+      <div class="btn btn-outline btn-sm" style="width:auto;display:inline-flex;">Evaluar mi iPhone →</div>
+    </div>
+  </section>
+
+  <!-- ============ PLAN A: entidades ============ -->
+  <section class="screen" data-screen="planA-entities">
+    <div class="eyebrow-row">Plan A · Buena vida crediticia</div>
+    <h1 class="hero-title">Elige tu entidad</h1>
+    <p class="hero-sub">El valor de cada entidad es precio de lista + su recargo de financiación.</p>
+
+    <div class="summary-card" id="entityDeviceBar" style="margin-bottom:18px;"></div>
+
+    <div class="entity-grid" id="entityGrid"></div>
+  </section>
+
+  <!-- ============ PLAN A: cupo si/no (genérico por entidad) ============ -->
+  <section class="screen" data-screen="planA-choice">
+    <div class="eyebrow-row" id="choiceEyebrow">Plan A</div>
+    <h1 class="hero-title" id="choiceTitle">¿Ya tienes cupo?</h1>
+    <p class="hero-sub">Cuéntanos tu situación para dirigirte al paso correcto.</p>
+
+    <div class="summary-card" id="choiceDeviceBar" style="margin-bottom:18px;"></div>
+
+    <button class="option-card" style="width:100%;text-align:left;border:1px solid var(--line);" onclick="show('planA-form')">
+      <h3>Ya tengo cupo</h3>
+      <p>Cuéntanos los datos de tu cupo y validamos tu compra.</p>
+    </button>
+
+    <button class="option-card" style="width:100%;text-align:left;border:1px solid var(--line);" onclick="show('planA-validate')">
+      <h3>Quiero validarme</h3>
+      <p>Aún no sabes cuánto cupo tienes. Te decimos cómo consultarlo.</p>
+    </button>
+  </section>
+
+  <!-- ============ PLAN A: formulario ============ -->
+  <section class="screen" data-screen="planA-form">
+    <div class="eyebrow-row" id="formEyebrow">Plan A</div>
+    <h1 class="hero-title">Datos de tu cupo</h1>
+    <p class="hero-sub">Para continuar con tu solicitud, indícanos los siguientes datos:</p>
+
+    <ul class="checklist">
+      <li><span class="step-num">1</span> Número de cédula (del titular)</li>
+      <li><span class="step-num">2</span> Nombre completo (como aparece en el documento)</li>
+      <li><span class="step-num">3</span> Valor del cupo a utilizar</li>
+      <li><span class="step-num">4</span> Valor total del cupo</li>
+      <li><span class="step-num">5</span> Ciudad de residencia</li>
+    </ul>
+
+    <div class="field">
+      <label for="fCedula">Número de cédula</label>
+      <input id="fCedula" inputmode="numeric" placeholder="Ej: 1002345678">
+    </div>
+    <div class="field">
+      <label for="fNombre">Nombre completo</label>
+      <input id="fNombre" placeholder="Como aparece en el documento">
+    </div>
+    <div class="field">
+      <label for="fCupoUsar">Valor del cupo a utilizar</label>
+      <input id="fCupoUsar" inputmode="numeric" placeholder="Ej: 2.000.000">
+    </div>
+    <div class="field">
+      <label for="fCupoTotal">Valor total del cupo</label>
+      <input id="fCupoTotal" inputmode="numeric" placeholder="Ej: 3.000.000">
+    </div>
+    <div class="field">
+      <label for="fCiudad">Ciudad de residencia</label>
+      <input id="fCiudad" placeholder="Ej: Cartagena de Indias">
+    </div>
+
+    <button class="btn btn-primary btn-block" onclick="submitPlanAForm()">Enviar y confirmar compra</button>
+  </section>
+
+  <!-- ============ PLAN A: confirmación ============ -->
+  <section class="screen" data-screen="planA-confirm">
+    <div class="confirm-box">
+      <div class="confirm-icon">✓</div>
+      <h2 style="font-size:20px;margin-bottom:8px;">Recibimos tus datos</h2>
+      <p class="hero-sub" style="margin:0 auto 20px;">Vamos a validar tu información y confirmar tu compra. Termina el proceso con uno de nuestros asesores en WhatsApp.</p>
+    </div>
+    <div class="summary-card" id="confirmSummary"></div>
+    <a class="btn btn-primary btn-block" id="waFormLink" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+  </section>
+
+  <!-- ============ PLAN A: quiero validarme ============ -->
+  <section class="screen" data-screen="planA-validate">
+    <div class="eyebrow-row" id="valEyebrow">Plan A</div>
+    <h1 class="hero-title">Consulta tu cupo</h1>
+    <p class="hero-sub" id="valText"></p>
+
+    <div class="summary-card" id="valDeviceBar" style="margin-bottom:18px;"></div>
+
+    <a class="btn btn-primary btn-block" id="valExternalLink" target="_blank" rel="noopener" style="margin-bottom:12px;">Dale clic aquí y diligencia tus datos</a>
+
+    <div class="note">Al final del formulario te dirán cuánto cupo tienes disponible. Si ya tienes cupo, contacta a un asesor de Kuota y termina el proceso con nosotros.</div>
+
+    <a class="btn btn-outline btn-block" id="waValidateLink" target="_blank" rel="noopener">Contactar a un asesor</a>
+  </section>
+
+  <!-- ============ PLAN A: Cupo Brilla (info) ============ -->
+  <section class="screen" data-screen="planA-brilla">
+    <div class="eyebrow-row">Plan A · Cupo Brilla</div>
+    <h1 class="hero-title">Termina tu compra en punto físico</h1>
+    <p class="hero-sub">El Cupo Brilla se valida presencialmente.</p>
+
+    <div class="summary-card" id="brillaDeviceBar" style="margin-bottom:18px;"></div>
+
+    <ul class="checklist">
+      <li><span class="step-num">1</span> Acércate a nuestro punto físico en Cartagena de Indias.</li>
+      <li><span class="step-num">2</span> Debe ir el titular o el codeudor del cupo.</li>
+      <li><span class="step-num">3</span> Lleva tu cédula.</li>
+      <li><span class="step-num">4</span> Lleva el recibo donde aparezca el valor del cupo disponible.</li>
+    </ul>
+
+    <a class="btn btn-primary btn-block" href="https://wa.me/573052890679?text=Hola%2C%20quiero%20agendar%20una%20visita%20al%20punto%20f%C3%ADsico%20para%20validar%20mi%20Cupo%20Brilla." target="_blank" rel="noopener">Escríbenos para agendar tu visita</a>
+  </section>
+
+  <!-- ============ PLAN A: redirección directa (Nequi / Bancolombia / Tarjeta) ============ -->
+  <section class="screen" data-screen="planA-direct">
+    <div class="eyebrow-row" id="directEyebrow">Plan A</div>
+    <h1 class="hero-title" id="directTitle">Vas a pagar con tu crédito</h1>
+    <p class="hero-sub" id="directText"></p>
+
+    <a class="btn btn-primary btn-block" id="directLink" target="_blank" rel="noopener">Continuar al pago</a>
+  </section>
+
+  <!-- ============ PLAN B: catálogo reportados ============ -->
+  <section class="screen" data-screen="planB-catalog">
+    <div class="eyebrow-row">Plan B · Reportado o poco historial</div>
+    <h1 class="hero-title">Crédito con cuota inicial</h1>
+    <p class="hero-sub">Aplica solo para iPhone. 14 cuotas quincenales/mensuales según acuerdo con Kuota. Elige tu equipo y confirma con un asesor.</p>
+
+    <div class="summary-card" id="planBDeviceBar" style="margin-bottom:18px;"></div>
+
+    <div id="planBList"></div>
+  </section>
+
+  <!-- ============ PLAN B: formulario de solicitud ============ -->
+  <section class="screen" data-screen="planB-form">
+    <div class="eyebrow-row">Plan B · Reportado o poco historial</div>
+    <h1 class="hero-title">Completa tus datos</h1>
+    <p class="hero-sub">Con esta información validamos tu solicitud y agilizamos la entrega de tu equipo.</p>
+
+    <div class="summary-card" id="pbDeviceBar" style="margin-bottom:20px;"></div>
+
+    <div class="field">
+      <label for="pbNombre">Nombre completo</label>
+      <input id="pbNombre" placeholder="Todos tus nombres y apellidos, como en tu cédula">
+    </div>
+    <div class="field">
+      <label for="pbCedula">Cédula</label>
+      <input id="pbCedula" inputmode="numeric" placeholder="Número de documento">
+    </div>
+    <div class="field">
+      <label for="pbFechaExp">Fecha de expedición</label>
+      <input id="pbFechaExp" type="date">
+    </div>
+    <div class="field">
+      <label for="pbLugarExp">Lugar de expedición</label>
+      <input id="pbLugarExp" placeholder="Ciudad donde se expidió tu cédula">
+    </div>
+    <div class="field">
+      <label for="pbWhatsapp">Número de WhatsApp</label>
+      <input id="pbWhatsapp" type="tel" placeholder="Ej: 3001234567">
+    </div>
+    <div class="field">
+      <label for="pbFechaNac">Fecha de nacimiento</label>
+      <input id="pbFechaNac" type="date">
+    </div>
+    <div class="field">
+      <label for="pbCorreo">Correo</label>
+      <input id="pbCorreo" type="email" placeholder="tucorreo@ejemplo.com">
+    </div>
+    <div class="field">
+      <label for="pbCelular">Celular a adquirir</label>
+      <input id="pbCelular" readonly>
+    </div>
+
+    <label class="check-row">
+      <input type="checkbox" id="pbCheckCodigo">
+      <span>¿Estarás pendiente al código de verificación que te enviaremos?</span>
+    </label>
+
+    <label class="check-row">
+      <input type="checkbox" id="pbCheckTerms">
+      <span>Acepto el tratamiento de mis datos personales conforme a la <button type="button" class="link-btn" onclick="toggleTerms()">Política de Tratamiento de Datos (Habeas Data)</button> de Kuota.</span>
+    </label>
+
+    <div class="terms-box" id="termsBox" style="display:none;">
+      <p><b>Autorización para el Tratamiento de Datos Personales — Kuota</b></p>
+      <p>De acuerdo con la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas concordantes sobre protección de datos personales en Colombia, al marcar esta casilla usted autoriza a Kuota (en adelante, "el Responsable") para:</p>
+      <p>1. Recolectar, almacenar, usar y procesar los datos personales suministrados en este formulario (nombre, cédula, fecha y lugar de expedición, número de WhatsApp, fecha de nacimiento, correo electrónico y equipo de interés) con la finalidad de evaluar y gestionar su solicitud de compra a crédito.</p>
+      <p>2. Compartir la información estrictamente necesaria con las entidades financieras o aliados de crédito relacionados con su solicitud (Addi, Sistecrédito, Banco de Bogotá, Su+Pay, Nequi, Bancolombia, Cupo Brilla, franquicias de tarjeta de crédito, u otros que el titular elija), únicamente para efectos de estudio, aprobación y desembolso del crédito.</p>
+      <p>3. Contactarlo por WhatsApp, llamada, SMS o correo electrónico para dar seguimiento a su solicitud, confirmar datos o enviar códigos de verificación.</p>
+      <p>Usted tiene derecho a conocer, actualizar, rectificar y solicitar la supresión de sus datos, así como a revocar esta autorización en cualquier momento, escribiendo a Kuota a través de WhatsApp (305 289 0679) o de nuestra cuenta @kuota.ctg. También puede presentar quejas ante la Superintendencia de Industria y Comercio cuando lo considere pertinente.</p>
+      <p>Kuota tratará sus datos de forma confidencial, con medidas de seguridad razonables, y no los usará para fines distintos a los aquí descritos.</p>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="pbSubmitBtn" disabled onclick="submitPlanBForm()">Enviar</button>
+  </section>
+
+  <!-- ============ PLAN B: confirmación ============ -->
+  <section class="screen" data-screen="planB-confirm">
+    <div class="confirm-box">
+      <div class="confirm-icon">✓</div>
+      <h2 style="font-size:20px;margin-bottom:8px;">Recibimos tus datos</h2>
+      <p class="hero-sub" style="margin:0 auto 20px;">Vamos a validar tu información. Termina el proceso con uno de nuestros asesores en WhatsApp.</p>
+    </div>
+    <div class="summary-card" id="pbConfirmSummary"></div>
+    <a class="btn btn-primary btn-block" id="pbWaLink" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+  </section>
+
+  <!-- ============ PLAN C: paso 1, datos + selección ============ -->
+  <section class="screen" data-screen="planC-step1">
+    <div class="eyebrow-row">Plan C · Parte de pago</div>
+    <h1 class="hero-title">Cuéntanos de tu iPhone actual</h1>
+    <p class="hero-sub">Paso 1 de 2 — completa tus datos y cómo quieres manejar la diferencia.</p>
+
+    <div class="summary-card" id="pcDeviceBar" style="margin-bottom:20px;"></div>
+
+    <div class="field"><label for="pcNombre">Nombre completo</label><input id="pcNombre" placeholder="Todos tus nombres y apellidos, como en tu cédula"></div>
+    <div class="field"><label for="pcCedula">Cédula</label><input id="pcCedula" inputmode="numeric" placeholder="Número de documento"></div>
+    <div class="field"><label for="pcFechaExp">Fecha de expedición</label><input id="pcFechaExp" type="date"></div>
+    <div class="field"><label for="pcLugarExp">Lugar de expedición</label><input id="pcLugarExp" placeholder="Ciudad donde se expidió tu cédula"></div>
+    <div class="field"><label for="pcWhatsapp">Número de WhatsApp</label><input id="pcWhatsapp" type="tel" placeholder="Ej: 3001234567"></div>
+    <div class="field"><label for="pcFechaNac">Fecha de nacimiento</label><input id="pcFechaNac" type="date"></div>
+    <div class="field"><label for="pcCorreo">Correo</label><input id="pcCorreo" type="email" placeholder="tucorreo@ejemplo.com"></div>
+    <div class="field"><label for="pcCelular">Celular a adquirir</label><input id="pcCelular" readonly></div>
+
+    <h3 class="section-label">¿Cómo quieres manejar la diferencia?</h3>
+    <label class="radio-row"><input type="radio" name="pcOption" value="efectivo"><span>Entregarás el excedente en efectivo (precio de lista − precio del celular evaluado)</span></label>
+    <label class="radio-row"><input type="radio" name="pcOption" value="cupos"><span>Financiarás el restante con cupos en entidades para Buena vida crediticia: Addi, Sistecrédito, Brilla, Su+Pay, Banco de Bogotá, Tarjeta de crédito, Nequi Créditos, Bancolombia Créditos</span></label>
+    <label class="radio-row"><input type="radio" name="pcOption" value="reportado"><span>Estás reportado y/o no tienes vida crediticia y quieres financiar el restante</span></label>
+
+    <label class="check-row" style="margin-top:16px;">
+      <input type="checkbox" id="pcCheckTerms">
+      <span>Acepto el tratamiento de mis datos personales conforme a la <button type="button" class="link-btn" onclick="toggleTermsC()">Política de Tratamiento de Datos (Habeas Data)</button> de Kuota.</span>
+    </label>
+    <div class="terms-box" id="termsBoxC" style="display:none;">
+      <p><b>Autorización para el Tratamiento de Datos Personales — Kuota</b></p>
+      <p>De acuerdo con la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas concordantes sobre protección de datos personales en Colombia, al marcar esta casilla usted autoriza a Kuota para recolectar, almacenar, usar y procesar los datos y fotografías suministrados en este formulario, con el fin de evaluar su equipo como parte de pago y gestionar su solicitud de compra a crédito.</p>
+      <p>Podremos compartir la información estrictamente necesaria con las entidades financieras o aliados de crédito relacionados con su solicitud (Addi, Sistecrédito, Banco de Bogotá, Su+Pay, Nequi, Bancolombia, Cupo Brilla, franquicias de tarjeta de crédito), únicamente para efectos de estudio, aprobación y desembolso del crédito.</p>
+      <p>Usted tiene derecho a conocer, actualizar, rectificar y solicitar la supresión de sus datos, así como a revocar esta autorización en cualquier momento, escribiendo a Kuota por WhatsApp (305 289 0679) o en @kuota.ctg. También puede presentar quejas ante la Superintendencia de Industria y Comercio.</p>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="pcNextBtn" disabled onclick="goPlanCStep2()">Siguiente</button>
+  </section>
+
+  <!-- ============ PLAN C: paso 2, fotos del equipo ============ -->
+  <section class="screen" data-screen="planC-step2">
+    <div class="eyebrow-row">Plan C · Parte de pago</div>
+    <h1 class="hero-title">Fotos de tu equipo</h1>
+    <p class="hero-sub">Paso 2 de 2 — necesitamos estas fotos para evaluar tu iPhone.</p>
+
+    <div class="upload-slot" id="slotFotos">
+      <div class="up-title">1. Imágenes del iPhone (parte física) *</div>
+      <div class="up-desc">Fotos claras de frente, atrás y los bordes del equipo.</div>
+      <input type="file" id="fileFotos" accept="image/*" multiple onchange="handlePcFiles('fotos', this.files)">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('fileFotos').click()">Subir fotos</button>
+      <div class="upload-thumbs" id="thumbsFotos"></div>
+    </div>
+
+    <div class="upload-slot" id="slotTrueTone">
+      <div class="up-title">2. Captura activando True Tone (en Brillo) *</div>
+      <div class="up-desc">Ajustes → Pantalla y brillo → que se vea activado True Tone.</div>
+      <input type="file" id="fileTrueTone" accept="image/*" onchange="handlePcFiles('truetone', this.files)">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('fileTrueTone').click()">Subir captura</button>
+      <div class="upload-thumbs" id="thumbsTrueTone"></div>
+    </div>
+
+    <div class="upload-slot" id="slotBateria">
+      <div class="up-title">3. Captura de la condición de la batería *</div>
+      <div class="up-desc">Ajustes → Batería → Salud y carga de la batería.</div>
+      <input type="file" id="fileBateria" accept="image/*" onchange="handlePcFiles('bateria', this.files)">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('fileBateria').click()">Subir captura</button>
+      <div class="upload-thumbs" id="thumbsBateria"></div>
+    </div>
+
+    <div class="upload-slot" id="slotPiezas">
+      <div class="up-title">4. Ajustes → General → Información → Piezas y servicio (opcional)</div>
+      <div class="up-desc">Ayuda a confirmar que las piezas son originales.</div>
+      <input type="file" id="filePiezas" accept="image/*" onchange="handlePcFiles('piezas', this.files)">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('filePiezas').click()">Subir captura</button>
+      <div class="upload-thumbs" id="thumbsPiezas"></div>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="pcSubmitBtn" disabled onclick="submitPlanCForm()">Enviar</button>
+  </section>
+
+  <!-- ============ PLAN C: confirmación ============ -->
+  <section class="screen" data-screen="planC-confirm">
+    <div class="confirm-box">
+      <div class="confirm-icon">✓</div>
+      <h2 style="font-size:20px;margin-bottom:8px;">Recibimos tu equipo en evaluación</h2>
+      <p class="hero-sub" style="margin:0 auto 20px;">Un asesor va a revisar tus fotos y te dirá cuánto reconocemos por tu iPhone. Termina el proceso en WhatsApp.</p>
+    </div>
+    <div class="summary-card" id="pcConfirmSummary"></div>
+    <a class="btn btn-primary btn-block" id="pcWaLink" target="_blank" rel="noopener">Continuar por WhatsApp</a>
+  </section>
+
+  <div class="footer-bar">
+    Kuota · Cartagena de Indias · WhatsApp 305 289 0679 · @kuota.ctg
+  </div>
+</div>
+
+<script src="/app.js" defer></script>
+</body>
+</html>
